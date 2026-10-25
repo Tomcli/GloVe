@@ -54,7 +54,7 @@ python pytorch/convert_glove_to_pytorch.py --download --output glove.2024.wikigi
 ```
 
 ```python
-from glove_embedding import GloVeEmbedding  # in pytorch/
+from pytorch.glove_embedding import GloVeEmbedding
 model = GloVeEmbedding.from_pretrained("glove.2024.wikigiga.50d.pt")
 token_vecs, mask = model(["Hello world!", "GloVe vectors"])  # [B, T, 50], [B, T]
 sentence_vecs = model.encode(["Hello world!"])               # [B, 50] mean-pooled

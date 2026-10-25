@@ -42,7 +42,19 @@ def load_glove_txt(path, dim=None):
     vocab, vectors, seen = [], [], set()
     with io.open(path, "r", encoding="utf-8", errors="replace") as f:
         for line_no, line in enumerate(f, 1):
-            parts = line.rstrip("\n").rstrip(" ").split(" ")
+            parts = line.split()
+            if line_no == 1 and len(parts) == 2:
+                try:
+                    header_vocab_size, header_dim = map(int, parts)
+                except ValueError:
+                    pass
+                else:
+                    if header_vocab_size >= 0 and header_dim > 0:
+                        if dim is not None and dim != header_dim:
+                            raise ValueError(
+                                f"Header dimension {header_dim} does not match requested dimension {dim}")
+                        dim = header_dim
+                        continue
             if dim is None:
                 dim = len(parts) - 1
             if len(parts) != dim + 1:

@@ -14,7 +14,7 @@ import torch.nn as nn
 PAD_TOKEN = "<pad>"
 UNK_TOKEN = "<unk>"
 # Words (with internal apostrophes/hyphens/periods), numbers, or single punctuation.
-_TOKEN_RE = re.compile(r"[a-z0-9]+(?:['\-.][a-z0-9]+)*|[^\sa-z0-9]")
+_TOKEN_RE = re.compile(r"[^\W_]+(?:['\-.][^\W_]+)*|[^\s\w]|_")
 
 
 class GloVeTokenizer:
