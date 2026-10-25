@@ -45,7 +45,23 @@ Make sure you have the following prerequisites installed when running the steps 
 
 The demo.sh script downloads a small corpus, consisting of the first 100M characters of Wikipedia. It collects unigram counts, constructs and shuffles cooccurrence data, and trains a simple version of the GloVe model. It also runs a word analogy evaluation script in python to verify word vector quality. More details about training on your own corpus can be found by reading [demo.sh](https://github.com/stanfordnlp/GloVe/blob/master/demo.sh) or the [src/README.md](https://github.com/stanfordnlp/GloVe/tree/master/src)
 
-## 2024 Vector Documentation 
+## PyTorch Usage
+Convert the 2024 Wikipedia + Gigaword 5 50d vectors to a PyTorch weight file and use them as a string-to-embedding model:
+
+```
+pip install torch
+python pytorch/convert_glove_to_pytorch.py --download --output glove.2024.wikigiga.50d.pt
+```
+
+```python
+from pytorch.glove_embedding import GloVeEmbedding
+model = GloVeEmbedding.from_pretrained("glove.2024.wikigiga.50d.pt")
+token_vecs, mask = model(["Hello world!", "GloVe vectors"])  # [B, T, 50], [B, T]
+sentence_vecs = model.encode(["Hello world!"])               # [B, 50] mean-pooled
+```
+Text is lowercased and tokenized; unknown tokens map to `<unk>` (mean of all vectors), padding uses `<pad>` (zeros). Use `--input` to convert any other GloVe `.txt` file.
+
+## 2024 Vector Documentation
 The training scripts and data preprocessing pipeline used for training the 2024 vectors can be found in the Training_README.md
 
 Analysis and more documentation for the new vectors can be found in this [report](https://arxiv.org/abs/2507.18103)
